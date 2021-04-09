@@ -9,8 +9,10 @@ const userResolvers = {
   user: (args) => {
     return user(args);
   },
-  users: () => {
+  users: (args) => {
+    const { limit } = args;
     return User.find()
+      .limit(limit)
       .then((res) => {
         return res.map((each) => ({
           _id: each._id,

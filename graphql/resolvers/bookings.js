@@ -10,8 +10,10 @@ const bookingResolvers = {
   booking: (args) => {
     return getBooking(args._id);
   },
-  bookings: () => {
+  bookings: (args) => {
+    const { limit } = args;
     return Booking.find()
+      .limit(limit)
       .then((res) => {
         return res.map((booking) => bookingObjectFormatter(booking));
       })

@@ -13,8 +13,10 @@ const eventResolvers = {
   event: (args) => {
     return getEvent(args);
   },
-  events: () => {
+  events: (args) => {
+    const { limit } = args;
     return Event.find()
+      .limit(limit)
       .then((res) => {
         return res.map((event) => eventObjectFormatter(event));
       })
