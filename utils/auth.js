@@ -23,30 +23,34 @@ const decodeToken = (token) => {
 
 const validate = (authorization) => {
   return new Promise((resolve, reject) => {
-    if (!authorization)
-      return reject(new Error("Missing Authorization header"));
+    if (!authorization) reject(Error("Missing Authorization Header"));
+
     const headerParts = authorization.split(" ");
-    if (headerParts.length < 2)
-      return reject(new Error("Invalid Authorization header"));
+    if (headerParts.length < 2) reject(Error("Invalid Authorization header"));
+
     const token = headerParts[1].toString();
     decodeToken(token)
       .then((result) => resolve(result))
       .catch((err) => {
-        reject(err);
         console.warn("failed to decode");
+        reject(err);
       });
   });
 };
 
 const validationMiddleware = async (req, res, next) => {
-  try {
-    const authInfo = await validate(req.headers.authorization);
-    req.authInfo = authInfo;
-  } catch (error) {
-    throw error;
+  if (req.body.query && !req.body.query.includes("login")) {
+    try {
+      const authInfo = await validate(req.headers.authorization);
+      req.authInfo = authInfo;
+      next();
+    } catch (error) {
+      console.log("Something went wrong. " + error);
+      res.status(401).json({ message: error.message });
+    }
+  } else {
+    next();
   }
-
-  next();
 };
 
 module.exports = {

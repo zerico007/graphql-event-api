@@ -30,7 +30,7 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-//app.use(validationMiddleware);
+app.use(validationMiddleware);
 app.use(
   "/eventapi",
   graphqlHTTP({
@@ -39,3 +39,13 @@ app.use(
     graphiql: true,
   })
 );
+
+//error handling
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message,
+    },
+  });
+});
