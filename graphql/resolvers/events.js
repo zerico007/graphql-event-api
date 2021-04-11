@@ -10,8 +10,13 @@ const {
 } = require("../../utils/helpers");
 
 const eventResolvers = {
-  event: (args) => {
-    return getEvent(args);
+  event: async (args) => {
+    try {
+      const event = await getEvent(args);
+      return event;
+    } catch (error) {
+      return error;
+    }
   },
   events: (args) => {
     const { limit } = args;
@@ -38,7 +43,7 @@ const eventResolvers = {
 
     return User.findById("605bf3d0b340a1548b61ec8e")
       .then((person) => {
-        if (!person) throw new Error("person not found");
+        if (!person) throw new Error("Person not found");
         person.createdEvents.push(event);
         person.save();
         return event.save().then((res) => {

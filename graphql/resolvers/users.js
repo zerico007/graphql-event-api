@@ -6,8 +6,13 @@ const { generateToken } = require("../../utils/auth");
 const { user, events } = require("../../utils/helpers");
 
 const userResolvers = {
-  user: (args) => {
-    return user(args);
+  user: async (args) => {
+    try {
+      const person = await user(args);
+      return person;
+    } catch (error) {
+      return error;
+    }
   },
   users: (args) => {
     const { limit } = args;

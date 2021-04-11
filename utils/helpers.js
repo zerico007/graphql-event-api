@@ -27,6 +27,7 @@ const bookingObjectFormatter = (bookingObj) => {
 const getBooking = (bookingId) => {
   return Booking.findById(bookingId)
     .then((book) => {
+      if (!book) throw new Error("Booking not found");
       return {
         ...objectDeepCopy(book),
         event: getEvent({ _id: book.event }),
@@ -42,6 +43,7 @@ const user = (query) => {
   return User.findOne(query)
     .populate("createdEvents")
     .then((person) => {
+      if (!person) throw new Error("Person not found");
       return {
         email: person.email,
         _id: person._id,
@@ -76,6 +78,7 @@ const events = (eventIds = []) => {
 const getEvent = (query) => {
   return Event.findOne(query)
     .then((event) => {
+      if (!event) throw new Error("Event not found");
       return eventObjectFormatter(event);
     })
     .catch((err) => {

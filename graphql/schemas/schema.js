@@ -43,7 +43,7 @@ type RootQuery {
     events(limit: Int): [Event!]!
     users(limit: Int): [User!]!
     login(userInput: UserInput): String!
-    bookings(limit: Int): [Booking!]!
+    bookings(limit: Int, user: ID, event: ID): [Booking!]!
     event(_id: ID, title: String): Event!
     user(_id: ID, email: String): User!
     booking(_id: ID!): Booking! 

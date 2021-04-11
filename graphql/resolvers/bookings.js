@@ -7,14 +7,23 @@ const {
 } = require("../../utils/helpers");
 
 const bookingResolvers = {
-  booking: (args) => {
-    return getBooking(args._id);
+  booking: async (args) => {
+    try {
+      const booking = await getBooking(args._id);
+      return booking;
+    } catch (error) {
+      return error;
+    }
   },
   bookings: (args) => {
     const { limit } = args;
-    return Booking.find()
+    const query = {};
+    if (args.user) query.user = args.user;
+    if (args.event) query.event = args.event;
+    return Booking.find(query)
       .limit(limit)
       .then((res) => {
+        if (!res.length) throw new Error("No bookings found");
         return res.map((booking) => bookingObjectFormatter(booking));
       })
       .catch((err) => {

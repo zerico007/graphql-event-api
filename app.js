@@ -30,9 +30,9 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-app.use(validationMiddleware);
+//app.use(validationMiddleware);
 app.use(
-  "/eventapi",
+  "/graphql",
   graphqlHTTP({
     schema,
     rootValue: root,
