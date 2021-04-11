@@ -28,11 +28,7 @@ const getBooking = (bookingId) => {
   return Booking.findById(bookingId)
     .then((book) => {
       if (!book) throw new Error("Booking not found");
-      return {
-        ...objectDeepCopy(book),
-        event: getEvent({ _id: book.event }),
-        user: user({ _id: book.user }),
-      };
+      return bookingObjectFormatter(book);
     })
     .catch((err) => {
       throw err;
