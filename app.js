@@ -32,7 +32,7 @@ app.use(cors());
 app.use(express.json());
 //app.use(validationMiddleware);
 app.use(
-  "/graphql",
+  "/eventapi",
   graphqlHTTP({
     schema,
     rootValue: root,
