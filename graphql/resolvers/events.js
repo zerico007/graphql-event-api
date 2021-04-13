@@ -5,14 +5,14 @@ const {
   objectDeepCopy,
   formatDate,
   eventObjectFormatter,
-  user,
-  getEvent,
+  getOneUser,
+  getOneEvent,
 } = require("../../utils/helpers");
 
 const eventResolvers = {
   event: async (args) => {
     try {
-      const event = await getEvent(args);
+      const event = await getOneEvent(args);
       return event;
     } catch (error) {
       return error;
@@ -50,7 +50,7 @@ const eventResolvers = {
           return {
             ...objectDeepCopy(res),
             date: formatDate(res.date),
-            createdBy: user({ _id: "605bf3d0b340a1548b61ec8e" }),
+            createdBy: getOneUser({ _id: "605bf3d0b340a1548b61ec8e" }),
           };
         });
       })

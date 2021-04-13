@@ -10,21 +10,21 @@ const eventObjectFormatter = (eventObj) => {
   return {
     ...objectDeepCopy(eventObj),
     date: formatDate(eventObj.date),
-    createdBy: user({ _id: eventObj.createdBy }),
+    createdBy: getOneUser({ _id: eventObj.createdBy }),
   };
 };
 
 const bookingObjectFormatter = (bookingObj) => {
   return {
     _id: bookingObj._id,
-    event: getEvent({ _id: bookingObj.event }),
-    user: user({ _id: bookingObj.user }),
+    event: getOneEvent({ _id: bookingObj.event }),
+    user: getOneUser({ _id: bookingObj.user }),
     createdAt: formatDate(bookingObj.createdAt),
     updatedAt: formatDate(bookingObj.updatedAt),
   };
 };
 
-const getBooking = (bookingId) => {
+const getOneBooking = (bookingId) => {
   return Booking.findById(bookingId)
     .then((book) => {
       if (!book) throw new Error("Booking not found");
@@ -35,7 +35,7 @@ const getBooking = (bookingId) => {
     });
 };
 
-const user = (query) => {
+const getOneUser = (query) => {
   return User.findOne(query)
     .populate("createdEvents")
     .then((person) => {
@@ -59,7 +59,7 @@ const user = (query) => {
     });
 };
 
-const events = (eventIds = []) => {
+const getEvents = (eventIds = []) => {
   return Event.find({ _id: { $in: eventIds } })
     .then((events) => {
       return events.map((event) => {
@@ -71,7 +71,7 @@ const events = (eventIds = []) => {
     });
 };
 
-const getEvent = (query) => {
+const getOneEvent = (query) => {
   return Event.findOne(query)
     .then((event) => {
       if (!event) throw new Error("Event not found");
@@ -87,8 +87,8 @@ module.exports = {
   formatDate,
   eventObjectFormatter,
   bookingObjectFormatter,
-  getBooking,
-  user,
-  events,
-  getEvent,
+  getOneBooking,
+  getOneUser,
+  getEvents,
+  getOneEvent,
 };

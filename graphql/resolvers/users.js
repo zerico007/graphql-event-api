@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../../utils/auth");
 
-const { user, events } = require("../../utils/helpers");
+const { getOneUser, getEvents } = require("../../utils/helpers");
 
 const userResolvers = {
   user: async (args) => {
     try {
-      const person = await user(args);
+      const person = await getOneUser(args);
       return person;
     } catch (error) {
       return error;
@@ -22,7 +22,7 @@ const userResolvers = {
         return res.map((each) => ({
           _id: each._id,
           email: each.email,
-          createdEvents: events([...each.createdEvents]),
+          createdEvents: getEvents([...each.createdEvents]),
         }));
       })
       .catch((err) => {

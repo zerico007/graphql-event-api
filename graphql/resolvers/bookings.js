@@ -2,14 +2,14 @@ const Booking = require("../../models/booking");
 const mongoose = require("mongoose");
 const {
   bookingObjectFormatter,
-  getBooking,
-  getEvent,
+  getOneBooking,
+  getOneEvent,
 } = require("../../utils/helpers");
 
 const bookingResolvers = {
   booking: async (args) => {
     try {
-      const booking = await getBooking(args._id);
+      const booking = await getOneBooking(args._id);
       return booking;
     } catch (error) {
       return error;
@@ -50,7 +50,7 @@ const bookingResolvers = {
           throw new Error("Event not found");
         }
         console.log("success! " + res);
-        return getEvent({ _id: res.event });
+        return getOneEvent({ _id: res.event });
       })
       .catch((err) => {
         throw err;
